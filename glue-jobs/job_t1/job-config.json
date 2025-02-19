@@ -1,0 +1,17 @@
+{
+    "Name": "T1",
+    "Role": "AWSGlueServiceRole",
+    "Command": {
+      "Name": "glueetl",
+      "ScriptLocation": "s3://nct-glue-jobs/glue-jobs/job_t1/script.py",
+      "PythonVersion": "3"
+    },
+    "DefaultArguments": {
+      "--TempDir": "s3://nct-glue-jobs/temp/",
+      "--job-language": "python",
+      "--extra-py-files": ""
+    },
+    "MaxCapacity": 2.0,
+    "GlueVersion": "3.0"
+  }
+  
