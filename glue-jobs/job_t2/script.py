@@ -1,28 +1,20 @@
-import sys
 import boto3
-from pyspark.context import SparkContext
 from awsglue.context import GlueContext
-from awsglue.job import Job
-from awsglue.utils import getResolvedOptions
+from pyspark.context import SparkContext
 
-# Initialize Glue Context
 sc = SparkContext()
 glueContext = GlueContext(sc)
-spark = glueContext.spark_session
 
-# Define S3 bucket path
-target_bucket = "s3://BCDE/"
+SOURCE_BUCKET = "nct-inbound-bucket-1235"
+TARGET_BUCKET = "nct-outbound-bucket-1234"
 
-# Read data from S3
-df = glueContext.create_dynamic_frame.from_options(
-    connection_type="s3",
-    connection_options={"paths": [target_bucket]},
-    format="parquet"
-)
+s3 = boto3.client("s3")
+objects = s3.list_objects_v2(Bucket=SOURCE_BUCKET)
 
-# Count rows to ensure data exists
-record_count = df.count()
-print(f"Job T2: Successfully validated {record_count} records in {target_bucket}")
+if "Contents" in objects:
+    for obj in objects["Contents"]:
+        copy_source = {"Bucket": SOURCE_BUCKET, "Key": obj["Key"]}
+        s3.copy_object(Bucket=TARGET_BUCKET, Key=obj["Key"], CopySource=copy_source)
+        print(f"✅ Copied {obj['Key']} from {SOURCE_BUCKET} to {TARGET_BUCKET}")
 
-# Commit job
-job.commit()
+print("🚀 Data transfer completed successfully.")
