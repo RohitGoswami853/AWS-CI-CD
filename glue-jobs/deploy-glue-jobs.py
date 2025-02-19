@@ -1,18 +1,21 @@
 import boto3
+import json
 
-glue_client = boto3.client("glue")
+glue = boto3.client("glue")
 
-def update_glue_job(job_name, script_location):
-    response = glue_client.update_job(
-        JobName=job_name,
-        JobUpdate={
-            "Command": {"Name": "glueetl", "ScriptLocation": script_location}
-        }
-    )
-    print(f"Updated {job_name}: {response}")
+# Load T1 job config
+with open("glue-jobs/job_t1/job-config.json", "r") as file:
+    job_t1_config = json.load(file)
 
-# Update Job T1
-update_glue_job("T1", "s3://your-bucket/glue-jobs/job_t1/script.py")
+# Create/Update T1 job
+glue.create_job(**job_t1_config)
+print("✅ Glue Job T1 updated successfully.")
 
-# Update Job T2 (Triggered automatically)
-update_glue_job("T2", "s3://your-bucket/glue-jobs/job_t2/script.py")
+# Modify config for T2
+job_t2_config = job_t1_config.copy()
+job_t2_config["JobName"] = "T2"
+job_t2_config["Command"]["ScriptLocation"] = "s3://nct-inbound-bucket-1235/glue-jobs/job_t2/script.py"
+
+# Create/Update T2 job
+glue.create_job(**job_t2_config)
+print("✅ Glue Job T2 updated successfully.")
