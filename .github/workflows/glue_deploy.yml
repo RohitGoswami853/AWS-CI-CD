@@ -2,20 +2,19 @@ name: Deploy AWS Glue Jobs
 
 on:
   push:
-    branches:
-      - main
     paths:
       - "glue-jobs/job_t1/**"
+  workflow_dispatch:
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout Repository
+      - name: Checkout Code
         uses: actions/checkout@v3
 
       - name: Configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials@v2
+        uses: aws-actions/configure-aws-credentials@v1
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
@@ -23,4 +22,5 @@ jobs:
 
       - name: Deploy Glue Jobs
         run: |
-          python glue-jobs/deploy-glue-jobs.py
+          pip install boto3
+          python deploy-glue-jobs.py
