@@ -1,5 +1,4 @@
 {
-    "Name": "T1",
     "Role": "AWSGlueServiceRole",
     "Command": {
       "Name": "glueetl",
