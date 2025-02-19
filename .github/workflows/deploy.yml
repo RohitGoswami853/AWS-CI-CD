@@ -3,7 +3,7 @@ name: Deploy AWS Glue Jobs
 on:
   push:
     branches:
-      - main  # Runs the workflow when code is pushed to the `main` branch
+      - main  # Runs the workflow when code is pushed to `main` branch
 
 jobs:
   deploy:
@@ -26,5 +26,8 @@ jobs:
 
     - name: Update AWS Glue Jobs
       run: |
-        aws glue update-job --job-name T1 --job-update '{"Command": {"ScriptLocation": "s3://nct-glue-jobs/glue-jobs/job_t1/script.py"}}'
-        aws glue update-job --job-name T2 --job-update '{"Command": {"ScriptLocation": "s3://nct-glue-jobs/glue-jobs/job_t2/script.py"}}'
+        # Update Job T1
+        aws glue update-job --job-name T1 --job-update file://glue-jobs/job_t1/job-config.json
+
+        # Update Job T2
+        aws glue update-job --job-name T2 --job-update file://glue-jobs/job_t2/job-config.json
