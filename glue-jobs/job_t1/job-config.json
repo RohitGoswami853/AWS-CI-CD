@@ -1,0 +1,11 @@
+{
+  "JobName": "T1",
+  "Role": "AWSGlueServiceRole",
+  "Command": {
+    "Name": "glueetl",
+    "ScriptLocation": "s3://your-bucket/glue-jobs/job_t1/script.py"
+  },
+  "GlueVersion": "3.0",
+  "MaxRetries": 1,
+  "Timeout": 60
+}
