@@ -3,9 +3,12 @@
   "Role": "AWSGlueServiceRole",
   "Command": {
     "Name": "glueetl",
-    "ScriptLocation": "s3://your-bucket/glue-jobs/job_t1/script.py"
+    "ScriptLocation": "s3://nct-inbound-bucket-1235/glue-jobs/job_t1/script.py",
+    "PythonVersion": "3"
   },
   "GlueVersion": "3.0",
   "MaxRetries": 1,
-  "Timeout": 60
+  "Timeout": 60,
+  "WorkerType": "G.1X",
+  "NumberOfWorkers": 5
 }
