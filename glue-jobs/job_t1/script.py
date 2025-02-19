@@ -1,13 +1,10 @@
-import sys
 import boto3
-from awsglue.utils import getResolvedOptions
 from awsglue.context import GlueContext
 from pyspark.context import SparkContext
 
 # Initialize Glue and Spark contexts
 sc = SparkContext()
 glueContext = GlueContext(sc)
-spark = glueContext.spark_session
 
 # S3 source and target buckets
 SOURCE_BUCKET = "nct-inbound-bucket-1235"
@@ -16,7 +13,7 @@ TARGET_BUCKET = "nct-outbound-bucket-1234"
 # Initialize S3 client
 s3 = boto3.client("s3")
 
-# Get list of objects in source bucket
+# List objects in source bucket
 objects = s3.list_objects_v2(Bucket=SOURCE_BUCKET)
 
 if "Contents" in objects:
